@@ -9,14 +9,12 @@ export const loginUser = createAsyncThunk(
       const response = await axiosInstance.post('/auth/login', credentials);
       const { access_token, user_id } = response.data;
 
-      // Save to localStorage early so axios interceptor works
       localStorage.setItem('token', access_token);
       localStorage.setItem('user_id', user_id);
 
-      // Fetch user details
       dispatch(fetchUser(user_id));
 
-      return response.data; // Contains access_token and user_id
+      return response.data;
     } catch (err) {
       console.log(err);
     }

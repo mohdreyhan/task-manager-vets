@@ -29,7 +29,7 @@ export class TaskService {
 
   async findAll(user: User): Promise<Task[]> {
     if (user.role === UserRole.Admin) {
-      return this.taskRepo.find(); // Admins see all
+      return this.taskRepo.find();
     }
     return this.taskRepo.find({
       where: { organizationId: user.organizationId },

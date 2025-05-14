@@ -3,7 +3,7 @@ import axiosInstance from '../app/axiosInstance';
 
 const initialState = {
   user: JSON.parse(localStorage.getItem('user') || 'null'),
-  users: [], // Initialize users state as an empty array
+  users: [], 
   loading: false,
   error: null,
 };
@@ -24,7 +24,7 @@ export const fetchUser = createAsyncThunk(
   async (userId: string, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get(`/users/${userId}`);
-      localStorage.setItem('user', JSON.stringify(response.data)); // Save to localStorage
+      localStorage.setItem('user', JSON.stringify(response.data));
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
@@ -72,7 +72,7 @@ const userSlice = createSlice({
         state.loading = true;
       })
       .addCase(fetchUsers.fulfilled, (state, action) => {
-        state.users = action.payload; // Save fetched users to state
+        state.users = action.payload; 
         state.loading = false;
         state.error = null;
       })

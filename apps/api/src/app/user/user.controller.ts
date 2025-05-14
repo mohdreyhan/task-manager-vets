@@ -7,19 +7,15 @@ import {
   Param,
   Body,
   NotFoundException,
-  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto, UpdateUserDto, UserRole } from '@my-monorepo/data';
-import { JwtAuthGuard, Roles, RolesGuard } from '@my-monorepo/auth';
+import { CreateUserDto, UpdateUserDto } from '@my-monorepo/data';
 
 @Controller('users')
-@UseGuards(JwtAuthGuard, RolesGuard)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
-    // @Roles(UserRole.Admin, UserRole.Manager)
   async create(@Body() dto: CreateUserDto) {
     return this.userService.create(dto);
   }

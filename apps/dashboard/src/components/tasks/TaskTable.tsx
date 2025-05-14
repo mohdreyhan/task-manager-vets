@@ -6,7 +6,7 @@ import { deleteTask, fetchTasks } from '../../store/taskSlice';
 const TaskTable = () => {
   const dispatch = useDispatch();
   const { tasks, loading } = useSelector(state => state.tasks);
-  const { user, users } = useSelector(state => state.users); // Assuming userSlice
+  const { user, users } = useSelector(state => state.users);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);

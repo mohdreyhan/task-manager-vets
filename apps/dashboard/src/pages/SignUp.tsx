@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { signupUser } from '../store/authSlice';
 import { useNavigate } from 'react-router-dom';
+import { fetchOrganizations } from '../store/organizationSlice';
 
 export default function SignUp() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { loading, error } = useSelector(state => state.auth);
+  const { loading, error } = useSelector((state) => state.auth);
+  const { list } = useSelector((state) => state.organizations);
 
   const [form, setForm] = useState({
     username: '',
@@ -16,7 +18,13 @@ export default function SignUp() {
     organizationId: '',
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  useEffect(() => {
+    dispatch(fetchOrganizations());
+  }, [dispatch]);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
@@ -24,14 +32,14 @@ export default function SignUp() {
     e.preventDefault();
 
     const payload = { ...form };
-    if (form.role === 'Admin') {
+    if (form.role === 'admin') {
       delete payload.organizationId;
     }
 
     const result = await dispatch(signupUser(payload));
 
     if (signupUser.fulfilled.match(result)) {
-      navigate('/login'); // ✅ redirect after successful signup
+      navigate('/login');
     }
   };
 
@@ -68,20 +76,27 @@ export default function SignUp() {
           onChange={handleChange}
           className="w-full p-2 border rounded"
         >
-          <option value="User">User</option>
-          <option value="Manager">Manager</option>
-          <option value="Admin">Admin</option>
+          <option value="user">User</option>
+          <option value="manager">Manager</option>
+          <option value="admin">Admin</option>
         </select>
 
-        {form.role !== 'Admin' && (
-          <input
+        {form.role !== 'admin' && (
+          <select
             name="organizationId"
-            onChange={handleChange}
             value={form.organizationId}
-            className="w-full p-2 border rounded"
-            placeholder="Organization ID"
-            required
-          />
+            onChange={handleChange}
+            className="w-full border p-2 mb-4"
+          >
+            <option disabled value="">
+              Select Organization
+            </option>
+            {list?.map((org) => (
+              <option key={org.id} value={org.id}>
+                {org.name}
+              </option>
+            ))}
+          </select>
         )}
 
         {error && <p className="text-red-500 text-sm text-center">{error}</p>}

@@ -24,9 +24,9 @@ import { AuthModule } from './auth/auth.module';
       password: 'postgres',
       database: 'taskmanager',
       autoLoadEntities: true,
-      synchronize: true, // use only in dev
+      synchronize: true,
     }),
-    TypeOrmModule.forFeature([Task, User, Organization]),  // Import Task entity here
+    TypeOrmModule.forFeature([Task, User, Organization]),
 
   ],
   controllers: [AppController],
